@@ -1,18 +1,16 @@
-
-## senaro:
+* How to attach process in vscode with non-root user
+** senaro:
 
 I need to debug in Docker use vscode, and my docker is login as a non-root user, so I met the problem: 
 
-
-```bash
+#+BEGIN_SRC
 Superuser access is required to attach to a process, but authorisation can't be confirmed since there is an extra line in the terminal.
-
-```
+#+END_SRC
 
 so I tried to attach the process with a gdb command in docker, but it 
 
 
-```bash
+#+BEGIN_SRC bash
 $ gdb --pid 5291
 GNU gdb (Ubuntu 12.0.90-0ubuntu1) 12.0.90
 Copyright (C) 2022 Free Software Foundation, Inc.
@@ -36,56 +34,54 @@ again as the root user.  For more details, see /etc/sysctl.d/10-ptrace.conf
 ptrace: Operation not permitted.
 (gdb)
 
-
-```
+#+END_SRC
 
 try to change 
 
 
-```bash
+#+BEGIN_SRC bash
 vi /etc/sysctl.d/10-ptrace.conf
+#+END_SRC
 
-```
 
-
-```bash
+#+BEGIN_SRC bash
 kernel.yama.ptrace_scope = 1
 
-```
+#+END_SRC
 
 to:
 
 
-```bash
+#+BEGIN_SRC bash
 kernel.yama.ptrace_scope = 0
 
-```
+#+END_SRC
 
 and got:
 
 
-```bash
+#+BEGIN_SRC bash
 $ sysctl -p /etc/sysctl.d/10-ptrace.conf 
 sysctl: setting key "kernel.yama.ptrace_scope", ignoring: Read-only file system
 
-```
+#+END_SRC
 
 the try to change value in the host:
 
 
-```bash
+#+BEGIN_SRC bash
 echo 0 > /proc/sys/kernel/yama/ptrace_scope 
 
 # go to docker
 cat /proc/sys/kernel/yama/ptrace_scope 
 0
 
-```
+#+END_SRC
 
 and now I can attach debug in my vscode `launch.json`
 
 
-```json
+#+BEGIN_SRC json
 "configurations": [
       {
         "name": "attach test",
@@ -111,9 +107,7 @@ and now I can attach debug in my vscode `launch.json`
         ]
       }
 ]
-
-
-```
+#+END_SRC
 
 ## reference:
 
