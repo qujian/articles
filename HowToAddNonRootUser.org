@@ -1,0 +1,8 @@
+* How to set non-root user of docker for vscode globally
+1. find 'Dev containers' in the Extensions window
+2. click 'Manage' button
+3. in the drop-down menu click 'Add to devcontainer.json'
+4. pop up window in the right-down side will prompt 'Extension is already included in Dev Container configuration'
+5. click the link of 'Dev Container configuration' and open the file like: ~/.config/Code/User/globalStorage/ms-vscode-remote.remote-containers/imageConfigs/ubuntu%3a22.json
+6. add "remoteUser": "your-non-root-user" under the json's root node.
+7. reopen vscode
